@@ -1,12 +1,20 @@
 <% include ../../partials/navbar %>
 <% include ../../partials/footer %>
-  
+ 
+<style>
+  #formdata .form-control {
+    width: auto;
+    }
+</style>
 
-  <div class="container">
-        <br/>
+ <!--  <div class="container"> -->
+  <div class="row mt-5">
+        
+        <div class="col-md-10 m-auto">
               <div class="col-md-5">
                   <a class="btn btn-primary btn-md bg-gray" href="/expense/tourBillClaim/getAirBusListView?tourBillClaimId=<%= parentTourBillId %>" >Go To Air/Rail/Bus</a>
               </div>
+            </br>
    <p id="tourbillId"><%= parentTourBillId %></p>
    <h4 align="center">Tour Bill Air/Rail/Bus Fare</h4>
    <br />
@@ -15,17 +23,15 @@
     <% include ../../partials/messages %>
     <div id="errorMessages"></div>
    <form method="post" action="/insertprecash" id="formdata"  enctype="multipart/form-data">
-    <div class="table-repsonsive">
+    <div class="table-responsive">
      <span id="error"></span>
-     <table class="table table-bordered" id="item_table">
+     <table class="table table-bordered"  id="item_table">    
       <tr>
        <th>SR. NO</th>
        <th>ARRIAVL dATE</th>
        <th>DEPARTURE DATE</th>
        <th>ACTIVITY CODE</th>
        <th>ARRIVAL STATION</th>
-       
-
        <th>DEPARTURE STATION</th>
        <th>AMOUNT</th>
        <th>UPLOAD FILE</th>
@@ -34,13 +40,12 @@
       </tr>
      </table>
      <div align="center">
-    
       <input type="submit" style="background-color:#2C3E50;" name="submit" class="btn btn-info" value="Submit" />
      </div>
     </div>
    </form>
    </div>
-   
+  </div>
   </div>
  
 

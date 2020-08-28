@@ -20,7 +20,7 @@
       <div class="col-md-10 m-auto">
             <div class="col-md-5">
                 <a class="btn btn-primary btn-md bg-gray" href="/expense/pettycashlistview?expenseId=<%= parentExpenseId %>" id="createNewPettyCashButton">Go PettyCash</a>
-                <a class="btn btn-primary btn-md bg-gray" href="/expense" >Go To Expense</a>
+                <a class="btn btn-primary btn-md bg-gray" href="/expense/expenseViewRel/<%= parentExpenseId %>" >Go To Expense </a>
             </div>
             <br/>
           <div class="">
@@ -65,6 +65,7 @@ $(document).ready(function(){
  $('#expenseId').hide();
  $('#activityCodes').hide();
  $('#addButton').hide();
+ var count = 1
  let expenseId = document.getElementById('expenseId').innerHTML; 
  let lstActivityCodes = [];
 
@@ -83,6 +84,46 @@ $(document).ready(function(){
       { 
         lstActivityCodes = response;
       }
+    var cnt = count++;
+    var html = '';
+    html += '<tr>';
+    html += '<td>'+cnt+'</td>';
+    html += '<td><input type="text" name="bill_no" class="form-control" value=" " /></td>';
+    html += '<td><input type="date" name="bill_date" class="form-control " /></td>';
+    html += '<td><select id="activity_code'+cnt+'"  name="projectTask"  class="form-control item_unit"></select></td>';
+    html += '<td><textarea  name="desc" class="form-control"></textarea></td>';
+    html += '<td><input type="text" name="nature_exp" class="form-control" /></td>';
+    html += '<td><input type="number" name="amount" class="form-control" /></td>';
+    html += '<td><input type="file" onChange="chkFile(this,'+cnt+')" name="fileprety" id="fileprety" class="form-control" /><input type="hidden" value="demo" name="imgpath" id="file_'+cnt+'"></td>';
+    html += '<td style="display:none;"><input  type="hidden" name="parentExpenseId" value="<%= parentExpenseId %>" class="form-control" /></td>';
+    html += '<td style="display:none;"><input  type="hidden" id="projectTask'+cnt+'"  name="activity_code"  class="form-control" /></td>';
+    html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="glyphicon glyphicon-minus"></span></button></td></tr>';
+    
+    $('#item_table').append(html);
+
+    $('#activity_code'+cnt)
+        .append($("<option></option>")
+        .attr("value",'')
+        .text('Select'));	
+      for(let i=0; i< lstActivityCodes.length ;i++)
+      {
+        $('#activity_code'+cnt)
+        .append($("<option></option>")
+        .attr("value",lstActivityCodes[i].sfid)
+        .text(lstActivityCodes[i].name));	
+      }
+
+      $('#activity_code'+cnt).on('change',function(){
+          let taskId = this.value;
+          let selectedCode = lstActivityCodes.filter((eachCode)=> {
+            if(eachCode.sfid == taskId)
+              return eachCode;
+          })
+          let label = selectedCode[0].activitycode;
+          document.getElementById('projectTask'+cnt).value = label;
+        //  $('#projectTask'+cnt).value = label;
+          console.log('label  :'+label+' value : '+taskId);
+        })
   })
   .fail((jqXHR,text,err) => {
       console.log('text  '+text + '  err '+err);
@@ -90,7 +131,7 @@ $(document).ready(function(){
 
  
 
- var count = 1
+ 
  $(document).on('click', '.add', function(){
     var cnt = count++;
     var html = '';
