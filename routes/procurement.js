@@ -151,10 +151,10 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
                             for(var i = 1; i <= teamMemberResult.rows.length; i++) {
                             projectTeamparams.push('$' + i);
                             lstTeamId.push(teamMemberResult.rows[i-1].team__c);
-                            } 
+                            }
                             var projectTeamQueryText = 'SELECT sfid, Name, Project__c FROM salesforce.Project_Team__c WHERE Team__c IN (' + projectTeamparams.join(',') + ')';
                             console.log('projectTeamQueryText '+projectTeamQueryText);
-                            
+                           
                             pool
                             .query(projectTeamQueryText,lstTeamId)
                             .then((projectTeamResult) => {
@@ -165,12 +165,12 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
                                 for(var i = 1; i <= projectTeamResult.rows.length; i++) {
                                     projectParams.push('$' + i);
                                     lstProjectId.push(projectTeamResult.rows[i-1].project__c);
-                                } 
+                                }
                                 console.log('lstProjectId  : '+lstProjectId);
                                 let projetQueryText = 'SELECT sfid, Name FROM salesforce.Milestone1_Project__c WHERE sfid IN ('+ projectParams.join(',')+ ')';
 
                                 pool.query(projetQueryText, lstProjectId)
-                                .then((projectQueryResult) => { 
+                                .then((projectQueryResult) => {
                                         console.log('Number of Projects '+projectQueryResult.rows.length);
                                         objData.projectlist = projectQueryResult.rows;
                                         response.send(objData);
@@ -180,7 +180,7 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
                                     response.send({});
 
                                 })
-                                })   
+                                })  
                             .catch((projectTeamQueryError)=> {
                                 console.log('projectTeamQueryError  '+projectTeamQueryError.stack);
                                 response.send({});
@@ -191,7 +191,7 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
                             response.send({});
                             })
 
-                            
+                           
            }
            else
            {
@@ -208,7 +208,7 @@ router.get('/assetEditDetails',verify ,async(request, response) =>{
 router.get('/fetchActivityCode', verify ,(request, response) => {
 
     console.log('hello i am inside Procurement Activity Code');
-  
+ 
     let assetId = request.query.assetId;
     console.log('assetId :' +assetId)
     let projectId ;
@@ -253,22 +253,22 @@ router.get('/fetchActivityCode', verify ,(request, response) => {
                   router.get('/fetchActivityCodeforCreateNew', verify ,(request, response) => {
 
                     console.log('hello i am inside Procurement Activity Code');
-                  
+                 
                                         pool
                                         .query('Select sfid , Name FROM salesforce.Activity_Code__c ')
                                         .then((activityCodeQueryResult) => {
                                           console.log('activityCodeQueryResult  : '+JSON.stringify(activityCodeQueryResult.rows));
                                           response.send(activityCodeQueryResult.rows);
-                
+               
                                         })
                                         .catch((activityCodeQueryError) => {
                                           console.log('activityCodeQueryError  : '+activityCodeQueryError.stack);
                                           response.send([]);
                                         })
-                                      
+                                     
                                     })
-                                    
-                
+                                   
+               
 
 router.get('/details',verify, async(request, response) => {
 
@@ -289,7 +289,7 @@ router.get('/details',verify, async(request, response) => {
  'FROM  salesforce.Asset_Requisition_Form__c asset '+
   'INNER JOIN salesforce.Milestone1_Project__c proj ON asset.Project_Department__c =  proj.sfid '+
    'WHERE asset.sfid = $1';
-    
+   
  let qyr='SELECT asset.id, asset.sfid,asset.name as name ,act.name as actname, asset.GST__c,asset.Requested_Closure_Plan_Date__c,asset.Requested_Closure_Actual_Date__c,asset.Project_Department__c, '+
  'asset.Manager_Approval__c,asset.Management_Approval__c,asset.Procurement_Committee_Approval__c,asset.Chairperson_Approval__c,asset.Committee_Approved_Counts__c,'+
  'asset.Comittee_Rejected_Count__c,asset.Procurement_Committee_Status__c,asset.Accounts_Approval__c,asset.Procurement_Head_Approval__c,asset.Approval_Status__c,'+
@@ -319,7 +319,7 @@ router.get('/details',verify, async(request, response) => {
             pool
             .query(qyr1,[assetId])
             .then((assetQueryResultwithouActivityCode)=> {
-                assetFormAndRelatedRecords.assetFormDetails = assetQueryResultwithouActivityCode.rows; 
+                assetFormAndRelatedRecords.assetFormDetails = assetQueryResultwithouActivityCode.rows;
             })
             .catch((assetQueryError)=> {
                 console.log('assetQueryError  : '+assetQueryError.stack);
@@ -337,7 +337,7 @@ router.get('/details',verify, async(request, response) => {
     .query('SELECT sfid, Name,Products_Services_Name__c, Items__c,Quantity__c, Others__c, Budget__c FROM  salesforce.Product_Line_Item__c WHERE Asset_Requisition_Form__c = $1',[assetId])
     .then((NonItProductResult)=> {
             if(NonItProductResult.rowCount > 0)
-            {   
+            {  
                     console.log('NonItProductResult  '+NonItProductResult.rows);
                     assetFormAndRelatedRecords.nonItProducts = NonItProductResult.rows;
             }
@@ -433,7 +433,7 @@ else{
    console.log('asset Insert Query= '+query);
    pool
    .query(query,[assetRequisitionName,project,actualDate,planDate,act,submittedBy])
-   .then((assetQueryResult) => {     
+   .then((assetQueryResult) => {    
             console.log('assetQueryResult.rows '+JSON.stringify(assetQueryResult));
             response.send('Successfully Inserted');
    })
@@ -469,7 +469,7 @@ router.post('/updateasset',(request,response)=>{
     console.log('deliveryTime  '+deliveryTime);
     console.log('deliveryCost  '+deliveryCost);
     console.log('attachment  '+attachment);
-    
+   
 
     if(closurePlanDate==''){
         console.log('plan');
@@ -477,7 +477,7 @@ router.post('/updateasset',(request,response)=>{
     }
     if(closureActualDate==''){
         console.log('dsclosure'+closureActualDate+'aa');
-        closureActualDate='1970-01-02'; 
+        closureActualDate='1970-01-02';
     }
     if(goodsDate==''){
         console.log('dsjjd goods ');
@@ -512,7 +512,7 @@ router.post('/updateasset',(request,response)=>{
         if(status=='Closed'){
             payPass='true';
             console.log('status :'+status+' paymetStatus :'+paymentStatus+' payPass:'+payPass);
-        }   
+        }  
     }
     else{
         if(status!='Closed'){
@@ -539,7 +539,7 @@ router.post('/updateasset',(request,response)=>{
      else{
          response.send('Choose Status Closed only When payment is Released ')
      }
-    
+   
     }
     else{
         console.log('@@@@@');
@@ -550,7 +550,7 @@ router.post('/updateasset',(request,response)=>{
                 .then((queryResultUpdate)=>{
                 console.log('queryResultUpdate '+JSON.stringify(queryResultUpdate));
                 response.send('succesfully Update!');
-                }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})   
+                }).catch((eroor)=>{console.log(JSON.stringify(eroor.stack))})  
             }
             else{
                 response.send('Choose Status Closed only When payment is Released !!!')
@@ -569,8 +569,8 @@ router.post('/updateasset',(request,response)=>{
 
 
    
-    
-    /* 
+   
+    /*
     else if(paymentStatus=='Rejected'){
         if(status=='' && payement=='' && receiverName=='' && receivedQuantity==''){
             console.log('VAlidation passed for REJECTED payments');
@@ -607,12 +607,12 @@ router.post('/updateasset',(request,response)=>{
         response.send('Updates error ');
     }
     */
-    
+   
    router.get('/nonItProducts/:parentAssetId',verify, (request,response) => {
 
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
-  /*   let qry ='SELECT sfid ,	State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
+  /*   let qry ='SELECT sfid , State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
     pool
     .query()
     .then((queryResult)=>{
@@ -690,7 +690,7 @@ router.post('/nonItProducts', (request,response) => {
             lstNonItProcurement.push(singleRecordValues);
             console.log('lstNOnIt'+lstNonItProcurement);
            }
-      
+     
 
         }      
    }
@@ -699,7 +699,7 @@ router.post('/nonItProducts', (request,response) => {
         numberOfRows = nonItFormResult.quantity.length;
         console.log('ROW COUnct'+numberOfRows);
         for(let i=0; i< numberOfRows ; i++)
-        { 
+        {
             let schema=joi.object({
                 state:joi.string().required().label('Please select State.'),
                 district:joi.string().required().label('Please select District.'),
@@ -709,7 +709,7 @@ router.post('/nonItProducts', (request,response) => {
                 itemSpecification:joi.string().required().label('Please fill Item Specification.'),          
                 quantity:joi.number().required().label('Please enter Quantity.'),
                 budget:joi.number().required().label('Please enter Budget.'),
-    
+   
             })
             let result=schema.validate({state:state[i],items:items[i],itemsCategory:itemsCategory[i],district:district[i],vendor:vendor[i],itemSpecification:itemSpecification[i],quantity:quantity[i],budget:budget[i]});
             console.log('validation REsult mul'+JSON.stringify(result.error));
@@ -718,7 +718,7 @@ router.post('/nonItProducts', (request,response) => {
                 response.send(result.error.details[0].context.label);
             }
             else{
-                if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="")){               
+                if(nonItFormResult.quoteNum[i]<3 &&(nonItFormResult.justification[i]==null || nonItFormResult.justification[i]=="")){              
                         response.send('Please enter Justification because quote count is not equal to 3.');    
                 }
                 else{
@@ -730,7 +730,7 @@ router.post('/nonItProducts', (request,response) => {
                     singleRecordValues.push(nonItFormResult.district[i]);
                     singleRecordValues.push(nonItFormResult.unitCost[i]);
                     singleRecordValues.push(nonItFormResult.unit[i]);
-                   // singleRecordValues.push(nonItFormResult.otherItems[i]);       
+                   // singleRecordValues.push(nonItFormResult.otherItems[i]);      
                     singleRecordValues.push(nonItFormResult.itemSpecification[i]);
                     singleRecordValues.push(nonItFormResult.quantity[i]);
                     singleRecordValues.push(nonItFormResult.budget[i]);
@@ -750,7 +750,7 @@ router.post('/nonItProducts', (request,response) => {
    }
    if(typeof(nonItFormResult.quantity) != 'object')
    {
-    let nonItProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item__c (Products_Services_Name__c, Items__c,State__c,District__c,Per_Unit_Cost__c,unit__c, Product_Service__c, Quantity__c, Budget__c, Quote1__c,Quote2__c	,Quote3__c,Number_of_quotes__c,justification__c,Impaneled_Vendor__c, Asset_Requisition_Form__c ) VALUES %L returning id',lstNonItProcurement);
+    let nonItProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item__c (Products_Services_Name__c, Items__c,State__c,District__c,Per_Unit_Cost__c,unit__c, Product_Service__c, Quantity__c, Budget__c, Quote1__c,Quote2__c ,Quote3__c,Number_of_quotes__c,justification__c,Impaneled_Vendor__c, Asset_Requisition_Form__c ) VALUES %L returning id',lstNonItProcurement);
     console.log('nonItProductsInsertQuery '+nonItProductsInsertQuery);
     pool.query(nonItProductsInsertQuery)
     .then((nonItProductsInsertQueryResult) => {
@@ -765,7 +765,7 @@ router.post('/nonItProducts', (request,response) => {
    else{
     console.log('lstNonItProcurement:'+lstNonItProcurement.length+' number of rows :'+nonItFormResult.quantity.length);
    if(lstNonItProcurement.length==nonItFormResult.quantity.length){
-    let nonItProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item__c (Products_Services_Name__c, Items__c, Product_Service__c, Quantity__c, Budget__c, Quote1__c,Quote2__c	,Quote3__c,Number_of_quotes__c,justification__c,Impaneled_Vendor__c, Asset_Requisition_Form__c ) VALUES %L returning id',lstNonItProcurement);
+    let nonItProductsInsertQuery = format('INSERT INTO salesforce.Product_Line_Item__c (Products_Services_Name__c, Items__c, Product_Service__c, Quantity__c, Budget__c, Quote1__c,Quote2__c ,Quote3__c,Number_of_quotes__c,justification__c,Impaneled_Vendor__c, Asset_Requisition_Form__c ) VALUES %L returning id',lstNonItProcurement);
     console.log('nonItProductsInsertQuery '+nonItProductsInsertQuery);
     pool.query(nonItProductsInsertQuery)
     .then((nonItProductsInsertQueryResult) => {
@@ -785,7 +785,7 @@ router.get('/itProducts/:parentAssetId',verify, (request,response) => {
 
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
-  /*   let qry ='SELECT sfid ,	State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
+  /*   let qry ='SELECT sfid , State__c,District__c,Items__c Form salesforce.Impaneled_Vendor__c';
     pool
     .query()
     .then((queryResult)=>{
@@ -804,7 +804,7 @@ router.post('/itProducts', (request,response) => {
     console.log('Inside ItProducts Post Method');
     let itFormResult = request.body;
     const{state,items,district,vendor,itemCategory,unitCost,unit,itemSpecification,quantity,budget}=request.body;
-    
+   
     console.log('itFormResult  '+JSON.stringify(itFormResult));
 
     let numberOfRows, lstItProducts= [];
@@ -828,7 +828,7 @@ router.post('/itProducts', (request,response) => {
         }
         else{
             if(itFormResult.quoteNum<3 &&(itFormResult.justification==null || itFormResult.justification=="")){
-                    response.send('Please enter Justification because quote count is not equal to 3.');     
+                    response.send('Please enter Justification because quote count is not equal to 3.');    
              }
              else{
                 let singleItProductRecordValue = [];
@@ -876,7 +876,7 @@ router.post('/itProducts', (request,response) => {
             }
             else{                
                 if(itFormResult.quoteNum[i]<3 &&(itFormResult.justification[i]==null || itFormResult.justification[i]=="")){
-                    response.send('Please enter Your Justificaton for Quote less than 3 in row number');     
+                    response.send('Please enter Your Justificaton for Quote less than 3 in row number');    
              }
              else{
                 let singleItProductRecordValue = [];
@@ -932,7 +932,7 @@ router.post('/itProducts', (request,response) => {
         response.send('Error Occurred !');
     })
    }
-    
+   
 });
 
 
@@ -954,7 +954,7 @@ router.get('/getRelatedQuote',(request, response) => {
             console.log('Else Block');
             response.send('Not Found');
         }
-            
+           
     })
     .catch((QuoteQueryError) => {
         console.log('QuoteQueryError  '+QuoteQueryError.stack);
@@ -991,7 +991,7 @@ router.get('/getCostandGSt',async(request,response)=>{
      })
      if(dstr=='' || dstr==null)
      {
-         qry='SELECT sfid,vendor_name__c,GST_No__c,	Quote_Public_URL__c FROM salesforce.Impaneled_Vendor__c WHERE state__c = $1 ';
+         qry='SELECT sfid,vendor_name__c,GST_No__c, Quote_Public_URL__c FROM salesforce.Impaneled_Vendor__c WHERE state__c = $1 ';
          lst.push(st);
          lst.push(ite);
          console.log('qryyy '+qry+'lstItem '+lst);
@@ -1017,15 +1017,15 @@ router.get('/getCostandGSt',async(request,response)=>{
             })
            })  
            console.log
-           response.send(vender);                   
-         }       
+           response.send(vender);                  
+         }      
      })
      .catch((querryError)=>{
          console.log('querryError '+querryError.stack);
          response.send(querryError);
      })
      
-    
+   
 })
 
 router.get('/getCostPerUnit',(request,response)=>{
@@ -1047,56 +1047,56 @@ router.get('/getProjectList', verify ,(request,response) => {
 
     console.log('hello i am inside Expense Project');
     console.log('Expense request.user '+JSON.stringify(request.user));
-    var userId = request.user.sfid; 
-    var projectName =''; 
+    var userId = request.user.sfid;
+    var projectName ='';
     pool
     .query('SELECT sfid, Name FROM salesforce.Contact  WHERE sfid = $1;',[userId])
-    .then(contactResult => 
+    .then(contactResult =>
       {
         console.log('Name of Contact  :: '+contactResult.rows[0].name+' sfid'+contactResult.rows[0].sfid);
-        var contactId = contactResult.rows[0].sfid;                 
+        var contactId = contactResult.rows[0].sfid;                
         pool
         .query('SELECT sfid, Name, Team__c FROM salesforce.Team_Member__c WHERE Representative__c = $1 ;',[contactId])
-        .then(teamMemberResult => 
+        .then(teamMemberResult =>
           {
             console.log('Name of TeamMemberId  : '+teamMemberResult.rows[0].name+'   sfid :'+teamMemberResult.rows[0].sfid);
             console.log('Team Id  : '+teamMemberResult.rows[0].team__c);
             console.log('Number of Team Member '+teamMemberResult.rows.length);
               var projectTeamparams = [], lstTeamId = [];
-              for(var i = 1; i <= teamMemberResult.rows.length; i++) 
+              for(var i = 1; i <= teamMemberResult.rows.length; i++)
                {
                  projectTeamparams.push('$' + i);
                 lstTeamId.push(teamMemberResult.rows[i-1].team__c);
-                } 
+                }
               var projectTeamQueryText = 'SELECT sfid, Name, Project__c FROM salesforce.Project_Team__c WHERE Team__c IN (' + projectTeamparams.join(',') + ')';
               console.log('projectTeamQueryText '+projectTeamQueryText);
-                      
+                     
                pool
               .query(projectTeamQueryText,lstTeamId)
-              .then((projectTeamResult) => 
+              .then((projectTeamResult) =>
                  {
                    console.log('projectTeam Reocrds Length '+projectTeamResult.rows.length);
                     console.log('projectTeam Name '+projectTeamResult.rows[0].name);
-              
+             
                     var projectParams = [], lstProjectId = [];
-                    for(var i = 1; i <= projectTeamResult.rows.length; i++) 
+                    for(var i = 1; i <= projectTeamResult.rows.length; i++)
                       {
                     projectParams.push('$' + i);
                     lstProjectId.push(projectTeamResult.rows[i-1].project__c);
-                      } 
+                      }
                     console.log('lstProjectId  : '+lstProjectId);
                     var projetQueryText = 'SELECT sfid, Name FROM salesforce.Milestone1_Project__c WHERE sfid IN ('+ projectParams.join(',')+ ')';
-              
+             
                       pool.
                       query(projetQueryText, lstProjectId)
-                     .then((projectQueryResult) => 
-                       { 
+                     .then((projectQueryResult) =>
+                       {
                         console.log('Number of Projects '+projectQueryResult.rows.length);
                         console.log('Project sfid '+projectQueryResult.rows[0].sfid+ 'Project Name '+projectQueryResult.rows[0].name);
                         var projectList = projectQueryResult.rows;
                         var lstProjectId = [], projectParams = [];
                         var j = 1;
-                        projectList.forEach((eachProject) => 
+                        projectList.forEach((eachProject) =>
                          {
                           console.log('eachProject sfid : '+eachProject.sfid);
                          lstProjectId.push(eachProject.sfid);
@@ -1106,7 +1106,7 @@ router.get('/getProjectList', verify ,(request,response) => {
                           })
                           response.send(projectQueryResult.rows);
                         })
-                            .catch((projectQueryError) => 
+                            .catch((projectQueryError) =>
                              {
                               console.log('projectQueryError '+projectQueryError.stack);
                              })
@@ -1121,11 +1121,11 @@ router.get('/getProjectList', verify ,(request,response) => {
                             {
                                console.log('Error in team member query '+teamMemberQueryError.stack);
                             })
-                
-                      }) 
-                
-                      .catch((contactQueryError) => 
-                        { 
+               
+                      })
+               
+                      .catch((contactQueryError) =>
+                        {
                           console.error('Error executing contact query', contactQueryError.stack);
                         })
 
@@ -1179,7 +1179,7 @@ router.get('/itProcurementList',(request,response)=>{
     })
     .catch((querryError)=>{
         console.log('QuerrError=>'+querryError.stack);
-        response.send(querryError); 
+        response.send(querryError);
     })
 
 })
@@ -1208,7 +1208,7 @@ router.get('/getProcurementITDetail',(request,response)=>{
                 .catch((error)=>{
                     console.log('erroror '+JSON.stringify(error.stack));
                 })
-    
+   
     })
     .catch((querryError)=>{
         console.log('QuerrError '+querryError.stack);
@@ -1223,7 +1223,7 @@ router.get('/getNonItProcurementListVIew/:parentAssetId',verify,(request,respons
     let parentAssetId = request.params.parentAssetId;
     console.log('parentAssetId  '+parentAssetId);
     response.render('getNonItProcurementList',{objUser,parentAssetId: parentAssetId});
-    
+   
 })
 
 router.get('/NonItProcurementList',(request,response)=>{
@@ -1265,7 +1265,7 @@ router.get('/NonItProcurementList',(request,response)=>{
     })
     .catch((querryError)=>{
         console.log('QuerrError=>'+querryError.stack);
-        response.send(querryError); 
+        response.send(querryError);
     })
 
 
@@ -1318,7 +1318,7 @@ router.post('/updateProcurement',(request,response)=>{
   console.log('updateQuerry  '+updateQuerry);
     pool
     .query(updateQuerry,[hide])
-    .then((updateProcurementResult) => {     
+    .then((updateProcurementResult) => {    
              console.log('updateProcurementResult '+JSON.stringify(updateProcurementResult));
              response.send('Success');
     })
@@ -1343,7 +1343,7 @@ router.post('/updateProcurementIt',(request,response)=>{
   console.log('updateQuerry  '+updateQuerry);
     pool
     .query(updateQuerry,[hide])
-    .then((updateProcurementITResult) => {     
+    .then((updateProcurementITResult) => {    
              console.log('updateProcurementItResult =>>'+JSON.stringify(updateProcurementITResult));
              response.send('Success');
     })
@@ -1407,7 +1407,7 @@ router.get('/getVondor/:parentId',verify,(request,resposne)=>{
 router.get('/getVendorDetail',async(request,response)=>{
     let vendorId=request.query.vendorId;
     console.log('vendorId '+vendorId);
-    
+   
     let qry ='';
     console.log('qry Detail =>'+qry);
     let recordDeatil={};
@@ -1428,7 +1428,7 @@ router.get('/getVendorDetail',async(request,response)=>{
     })
 await
 pool
-.query('select sfid ,name,Impaneled_Vendor__c,Unit__c,	Items__c,Per_Unit_Cost__c,Category__c '+
+.query('select sfid ,name,Impaneled_Vendor__c,Unit__c, Items__c,Per_Unit_Cost__c,Category__c '+
 'FROM salesforce.Item_Description__c where impaneled_vendor__c=$1',[vendorId])
 .then((itemdescriptionQueryy)=>{
     console.log('ten description =>'+JSON.stringify(itemdescriptionQueryy.rows));
@@ -1489,7 +1489,7 @@ pool
     const{name,authority, cont,bankkDet,ifsc,pan,gst,add,accNo,state,url,other,district}=request.body;
     console.log(name+authority+cont+bankkDet+ifsc+pan+gst+add+accNo+state+url+other+district);
 
-    
+   
     let record = [];
     record.push(name);
     record.push(authority);
@@ -1520,7 +1520,7 @@ console.log(recordlist);
         console.log('error  : '+error.stack);
         response.send('Error Occurred !');
     })
-  
+ 
 
     })
 router.get('/ItemDescriptionListView',verify,(request,response)=>{
@@ -1653,7 +1653,7 @@ router.post('/sendProcurementAccountsApproval',(request, response) => {
           else{
               console.log('READY FOR SEND Accout APPROVAL');
               pool
-              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2 WHERE sfid= $3;',[true, body.comment, body.assetRequisitionFormId])
+              .query('UPDATE salesforce.Asset_Requisition_Form__c SET isSentForApprovalFromHeroku__c = $1 ,Heroku_Accounts_Approval_Comment__c =$2,isSentForAccountsApprovalFromHeroku__c= $3 WHERE sfid= $4;',[true, body.comment,true, body.assetRequisitionFormId])
               .then((requisitionQueryResult) =>{
                   console.log('requisitionQueryResult  : '+JSON.stringify(requisitionQueryResult));
                   response.send('Accounts Approval Sent Successfully !');
@@ -1675,9 +1675,9 @@ router.post('/sendProcurementAccountsApproval',(request, response) => {
     .catch((requisitionQueryError) =>{
         console.log('requisitionQueryError   '+requisitionQueryError);
         response.send('Error occured while sending approval !');
-    }) 
+    })
 
-    
+   
 });
 
 
@@ -1712,14 +1712,14 @@ router.post('/updateVendor',(request,response)=>{
                          'Bank_IFSC_Code__c = \''+ifsc+'\', '+
                          'pan_no__c = \''+pan+'\', '+
                          'address__c = \''+add+'\', '+
-                         'GST_No__c = \''+gst+'\', '+ 
-                         'Others__c = \''+other+'\', '+ 
-                         'quote_public_url__c = \''+quote+'\' '+                       
+                         'GST_No__c = \''+gst+'\', '+
+                         'Others__c = \''+other+'\', '+
+                         'quote_public_url__c = \''+quote+'\' '+                      
                          'WHERE sfid = $1';
   console.log('updateQuerry  '+updateQuerry);
     pool
     .query(updateQuerry,[hide])
-    .then((updateQuerryResult) => {     
+    .then((updateQuerryResult) => {    
              console.log('updateQuerryResult =>>'+JSON.stringify(updateQuerryResult));
              response.send('Success');
     })
@@ -1766,7 +1766,7 @@ router.post('/updateItemescription',(request,response)=>{
 console.log('updateQuerry  '+updateQuerry);
 pool
 .query(updateQuerry,[hide])
-.then((updateQuerryResult) => {     
+.then((updateQuerryResult) => {    
 console.log('updateQuerryResult =>>'+JSON.stringify(updateQuerryResult));
 response.send('Success');
 })
@@ -1953,7 +1953,7 @@ router.post('/updatefeedBack',(request,response)=>{
 console.log('updateQuerry  '+updateQuerry);
 pool
 .query(updateQuerry,[feedid])
-.then((updateQuerryResult) => {     
+.then((updateQuerryResult) => {    
 console.log('updateQuerryResult =>>'+JSON.stringify(updateQuerryResult));
 response.send("succesfully Update");
 })
@@ -2006,7 +2006,7 @@ router.post('/updateITfeedback',(request,response)=>{
     console.log('procidt'+feedid);
     console.log('issue'+issue);
     console.log('quantity '+quantity);
-    
+   
     let updateQuerry = 'UPDATE salesforce.Feedbacks_IT__c SET '+
     'quyantiut__c = \''+quantity+'\', '+
     'timely_submissions_of_deliverables_goods__c = \''+time+'\', '+
@@ -2016,7 +2016,7 @@ router.post('/updateITfeedback',(request,response)=>{
 console.log('updateQuerry  '+updateQuerry);
 pool
 .query(updateQuerry,[feedid])
-.then((updateQuerryResult) => {     
+.then((updateQuerryResult) => {    
 console.log('updateQuerryResult =>>'+JSON.stringify(updateQuerryResult));
 response.send("succesfully Update");
 })
@@ -2059,14 +2059,14 @@ router.post('/uploadFiless',(request,response)=>{
     else{
         response.send('ERROR PLEASE CHOOSE FILE FILE');
     }
-  
+ 
 })
 router.get('/assetRequisitionViewRel/:parentExpenseId',verify,(request, response) => {
     var parentprocurementId = request.params.parentExpenseId;
     console.log('parentExpenseId  '+parentprocurementId);
   let objUser=request.user;
         console.log('user '+objUser);  
-        response.render('AssetLandingPage',{objUser,parentprocurementId:parentprocurementId}); 
+        response.render('AssetLandingPage',{objUser,parentprocurementId:parentprocurementId});
 })
 
 router.get('/ItemDescriptionViewRel/:vendorId',verify,(request, response) => {
@@ -2074,8 +2074,8 @@ router.get('/ItemDescriptionViewRel/:vendorId',verify,(request, response) => {
     console.log('vendorId  '+vendorId);
      let objUser=request.user;
         console.log('user '+objUser);  
-        response.render('ImpaneledLandingPage',{objUser,vendorId:vendorId}); 
+        response.render('ImpaneledLandingPage',{objUser,vendorId:vendorId});
 })
 
-    
+   
 module.exports = router;
