@@ -83,6 +83,8 @@
   '</div>';
   $('#errorMessages').empty();
   $('#errorMessages').append(errorHtml); 
+ 
+ 
   }) 
   })
   })
@@ -978,13 +980,31 @@
       assetDetailsTableRows += '</tr>';
       assetDetailsTableRows += '<tr>';
       assetDetailsTableRows += '<td><strong>if < 3 quotations, specify Reason<strong></td>';
-      assetDetailsTableRows += '<td>'+assetDetailsRecord.if_3_quotations_specify_reason__c+'</td>';
+        if(assetDetailsRecord.if_3_quotations_specify_reason__c==true){
+          assetDetailsTableRows += '<td>Yes</td>';
+        }
+        else {
+          assetDetailsTableRows += '<td>No</td>';
+        }
+      
       assetDetailsTableRows += '<td><strong>reason for non-registered GST Vendor<strong></td>';
-      assetDetailsTableRows += '<td>'+assetDetailsRecord.reason_for_non_registered_gst_vendor__c+'</td>';
+        if(assetDetailsRecord.reason_for_non_registered_gst_vendor__c==true){
+          assetDetailsTableRows += '<td>Yes</td>';
+        }
+        else {
+          assetDetailsTableRows += '<td>No</td>';
+        }
+     // assetDetailsTableRows += '<td>'+assetDetailsRecord.reason_for_non_registered_gst_vendor__c+'</td>';
       assetDetailsTableRows += '</tr>'; 
       assetDetailsTableRows += '<tr>';
       assetDetailsTableRows += '<td><strong>Pricing Terms/Cost comparison<strong></td>';
-      assetDetailsTableRows += '<td>'+assetDetailsRecord.pricing_terms_cost_comparison__c+'</td>';
+        if(assetDetailsRecord.pricing_terms_cost_comparison__c==true){
+          assetDetailsTableRows += '<td>Yes</td>';
+        }
+        else {
+          assetDetailsTableRows += '<td>No</td>';
+        }
+    //  assetDetailsTableRows += '<td>'+assetDetailsRecord.pricing_terms_cost_comparison__c+'</td>';
       assetDetailsTableRows += '<td><strong>Delivery Terms: Delivery Place<strong></td>';
       assetDetailsTableRows += '<td>'+assetDetailsRecord.delivery_terms_delivery_place__c+'</td>';
       assetDetailsTableRows += '</tr>'; 
@@ -1430,6 +1450,9 @@ function accountsApprovalFunctionality(){
       '</div>';
       $('#errorMessages').empty();
       $('#errorMessages').append(errorHtml); 
+      if(jqXHR.responseText=='Successfully Inserted'){
+                document.getElementById("assetRequisitionForm").reset();
+              }
       }) 
       })
       })
